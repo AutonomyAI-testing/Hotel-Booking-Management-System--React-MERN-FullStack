@@ -1,7 +1,10 @@
 import { Link, useNavigate } from "react-router-dom";
+import { useQuery, useQueryClient } from "react-query";
 import useAppContext from "../hooks/useAppContext";
 import useSearchContext from "../hooks/useSearchContext";
-import SignOutButton from "./SignOutButton";
+import { useMutationWithLoading } from "../hooks/useLoadingHooks";
+import UserAvatar from "./UserAvatar";
+import * as apiClient from "../api-client";
 import {
   FileText,
   Activity,
@@ -9,12 +12,56 @@ import {
   Building2,
   Calendar,
   LogIn,
+  User,
+  Mail,
+  LogOut,
 } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
 
 const Header = () => {
-  const { isLoggedIn } = useAppContext();
+  const { isLoggedIn, showToast } = useAppContext();
   const search = useSearchContext();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+  // Fetch current user data when logged in
+  const { data: currentUser } = useQuery(
+    "currentUser",
+    apiClient.fetchCurrentUser,
+    {
+      enabled: isLoggedIn,
+      staleTime: 5 * 60 * 1000, // 5 minutes
+    }
+  );
+
+  // Sign out mutation
+  const signOutMutation = useMutationWithLoading(apiClient.signOut, {
+    onSuccess: async () => {
+      await queryClient.invalidateQueries("validateToken");
+      showToast({
+        title: "Successfully Signed Out",
+        description:
+          "You have been logged out of your account. Redirecting to sign-in page...",
+        type: "SUCCESS",
+      });
+      navigate("/sign-in");
+      window.location.reload();
+    },
+    onError: (error: Error) => {
+      showToast({
+        title: "Sign Out Failed",
+        description: error.message,
+        type: "ERROR",
+      });
+    },
+    loadingMessage: "Signing out...",
+  });
 
   const handleLogoClick = () => {
     // Clear search context when going to home page
@@ -93,7 +140,45 @@ const Header = () => {
                     API Status
                   </Link>
 
-                  <SignOutButton />
+                  {/* User Profile Avatar and Dropdown */}
+                  {currentUser && (
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <UserAvatar
+                          firstName={currentUser.firstName}
+                          lastName={currentUser.lastName}
+                          email={currentUser.email}
+                        />
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className="w-56 bg-white" align="end">
+                        {/* User Info Header */}
+                        <div className="px-2 py-2">
+                          <p className="font-semibold text-sm text-gray-900">
+                            {currentUser.firstName} {currentUser.lastName}
+                          </p>
+                          <p className="text-xs text-gray-500 flex items-center mt-1">
+                            <Mail className="w-3 h-3 mr-1" />
+                            {currentUser.email}
+                          </p>
+                        </div>
+                        <DropdownMenuSeparator />
+                        {/* Profile Settings Option */}
+                        <DropdownMenuItem className="text-gray-700" disabled>
+                          <User className="w-4 h-4 mr-2" />
+                          My Profile
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        {/* Sign Out Option */}
+                        <DropdownMenuItem
+                          className="text-red-600 cursor-pointer"
+                          onClick={() => signOutMutation.mutate(undefined)}
+                        >
+                          <LogOut className="w-4 h-4 mr-2" />
+                          Sign Out
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  )}
                 </>
               ) : (
                 <Link
