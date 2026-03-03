@@ -24,7 +24,7 @@ const Hero = ({ onSearch }: { onSearch: (searchData: any) => void }) => {
             </span>
           </div>
 
-          <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
+          <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight border-4 border-red-600 p-6 rounded-lg inline-block">
             Find Your Perfect
             <span className="block bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
               Dream Stay
