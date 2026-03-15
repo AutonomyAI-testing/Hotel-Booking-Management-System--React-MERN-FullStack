@@ -76,6 +76,7 @@ export default {
         "fade-in": "fadeIn 0.5s ease-in-out",
         "slide-up": "slideUp 0.3s ease-out",
         "bounce-gentle": "bounceGentle 2s infinite",
+        "wave-motion": "waveMotion 10s ease-in-out infinite alternate",
       },
       keyframes: {
         fadeIn: {
@@ -89,6 +90,10 @@ export default {
         bounceGentle: {
           "0%, 100%": { transform: "translateY(0)" },
           "50%": { transform: "translateY(-5px)" },
+        },
+        waveMotion: {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(40px)" },
         },
       },
     },

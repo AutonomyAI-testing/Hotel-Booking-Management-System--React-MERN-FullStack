@@ -1,5 +1,6 @@
 import Footer from "../components/Footer";
 import Header from "../components/Header";
+import WaveDivider from "../components/WaveDivider";
 import { useLocation } from "react-router-dom";
 // import Hero from "../components/Hero";
 // import SearchBar from "../components/SearchBar";
@@ -28,6 +29,7 @@ const Layout = ({ children }: Props) => {
           {children}
         </div>
       )}
+      <WaveDivider />
       <Footer />
     </div>
   );
