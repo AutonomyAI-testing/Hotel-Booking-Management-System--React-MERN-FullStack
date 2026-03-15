@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import useAppContext from "../hooks/useAppContext";
 import useSearchContext from "../hooks/useSearchContext";
@@ -9,44 +10,53 @@ import {
   Building2,
   Calendar,
   LogIn,
+  Menu,
+  X,
+  Loader2,
 } from "lucide-react";
 
 const Header = () => {
   const { isLoggedIn } = useAppContext();
   const search = useSearchContext();
   const navigate = useNavigate();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isSignInLoading, setIsSignInLoading] = useState(false);
 
   const handleLogoClick = () => {
     // Clear search context when going to home page
     search.clearSearchValues();
     navigate("/");
+    setIsMobileMenuOpen(false);
+  };
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
   };
 
   return (
     <>
-      {/* Development Banner */}
-      {/* {!import.meta.env.PROD && (
-        <div className="bg-yellow-500 text-black text-center py-1 text-xs font-medium">
-          🚧 Development Mode - Auth state persists between sessions
-        </div>
-      )} */}
       <header className="bg-gradient-to-r from-primary-600 to-primary-700 shadow-large sticky top-0 z-50">
         <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             {/* Logo */}
             <button
               onClick={handleLogoClick}
-              className="flex items-center space-x-2 group"
+              className="flex items-center space-x-2 group flex-shrink-0"
+              aria-label="MernHolidays Home"
             >
               <div className="bg-white p-2 rounded-lg shadow-soft group-hover:shadow-medium transition-all duration-300">
                 <Building2 className="w-6 h-6 text-primary-600" />
               </div>
-              <span className="text-2xl font-bold text-white tracking-tight group-hover:text-primary-100 transition-colors">
+              <span className="text-2xl font-bold text-red-500 tracking-tight group-hover:text-primary-100 transition-colors hidden sm:inline">
                 MernHolidays
               </span>
             </button>
 
-            {/* Navigation */}
+            {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center space-x-1">
               {isLoggedIn ? (
                 <>
@@ -59,7 +69,6 @@ const Header = () => {
                     Analytics
                   </Link>
 
-                  {/* <div className="w-px h-6 bg-white/20 mx-2"></div> */}
                   <Link
                     className="flex items-center text-white/90 hover:text-white px-4 py-2 rounded-lg font-medium hover:bg-white/10 transition-all duration-200 group"
                     to="/my-bookings"
@@ -96,35 +105,118 @@ const Header = () => {
                   <SignOutButton />
                 </>
               ) : (
-                <Link
-                  to="/sign-in"
-                  className="flex items-center bg-white text-primary-600 px-6 py-2 rounded-lg font-semibold hover:bg-primary-50 hover:shadow-medium transition-all duration-200 group"
+                <button
+                  onClick={() => {
+                    setIsSignInLoading(true);
+                    navigate("/sign-in");
+                  }}
+                  disabled={isSignInLoading}
+                  className="flex items-center bg-white text-primary-600 px-6 py-2 rounded-lg font-semibold hover:bg-primary-50 hover:shadow-medium transition-all duration-200 group disabled:opacity-75 disabled:cursor-not-allowed"
                 >
-                  <LogIn className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
-                  Sign In
-                </Link>
+                  {isSignInLoading ? (
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  ) : (
+                    <LogIn className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
+                  )}
+                  {isSignInLoading ? "Loading..." : "Sign In"}
+                </button>
               )}
             </nav>
 
             {/* Mobile Menu Button */}
-            <div className="md:hidden">
-              <button className="text-white p-2 rounded-lg hover:bg-white/10 transition-colors">
-                <svg
-                  className="w-6 h-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
-                </svg>
-              </button>
-            </div>
+            <button
+              onClick={toggleMobileMenu}
+              className="md:hidden text-white p-2 rounded-lg hover:bg-white/10 transition-colors"
+              aria-label="Toggle mobile menu"
+              aria-expanded={isMobileMenuOpen}
+            >
+              {isMobileMenuOpen ? (
+                <X className="w-6 h-6" />
+              ) : (
+                <Menu className="w-6 h-6" />
+              )}
+            </button>
           </div>
+
+          {/* Mobile Navigation Menu */}
+          {isMobileMenuOpen && (
+            <div className="md:hidden pb-4 border-t border-white/10">
+              <nav className="flex flex-col space-y-2 pt-4">
+                {isLoggedIn ? (
+                  <>
+                    {/* Analytics Dashboard Link */}
+                    <Link
+                      onClick={closeMobileMenu}
+                      className="flex items-center text-white/90 hover:text-white px-4 py-3 rounded-lg font-medium hover:bg-white/10 transition-all duration-200 group"
+                      to="/analytics"
+                    >
+                      <BarChart3 className="w-4 h-4 mr-3 group-hover:scale-110 transition-transform" />
+                      Analytics
+                    </Link>
+
+                    <Link
+                      onClick={closeMobileMenu}
+                      className="flex items-center text-white/90 hover:text-white px-4 py-3 rounded-lg font-medium hover:bg-white/10 transition-all duration-200 group"
+                      to="/my-bookings"
+                    >
+                      <Calendar className="w-4 h-4 mr-3 group-hover:scale-110 transition-transform" />
+                      My Bookings
+                    </Link>
+
+                    <Link
+                      onClick={closeMobileMenu}
+                      className="flex items-center text-white/90 hover:text-white px-4 py-3 rounded-lg font-medium hover:bg-white/10 transition-all duration-200 group"
+                      to="/my-hotels"
+                    >
+                      <Building2 className="w-4 h-4 mr-3 group-hover:scale-110 transition-transform" />
+                      My Hotels
+                    </Link>
+
+                    {/* API Documentation Link */}
+                    <Link
+                      onClick={closeMobileMenu}
+                      className="flex items-center text-white/90 hover:text-white px-4 py-3 rounded-lg font-medium hover:bg-white/10 transition-all duration-200 group"
+                      to="/api-docs"
+                    >
+                      <FileText className="w-4 h-4 mr-3 group-hover:scale-110 transition-transform" />
+                      API Docs
+                    </Link>
+
+                    {/* API Status Link */}
+                    <Link
+                      onClick={closeMobileMenu}
+                      className="flex items-center text-white/90 hover:text-white px-4 py-3 rounded-lg font-medium hover:bg-white/10 transition-all duration-200 group"
+                      to="/api-status"
+                    >
+                      <Activity className="w-4 h-4 mr-3 group-hover:scale-110 transition-transform" />
+                      API Status
+                    </Link>
+
+                    <div className="pt-2 border-t border-white/10">
+                      <SignOutButton />
+                    </div>
+                  </>
+                ) : (
+                  <button
+                    onClick={() => {
+                      setIsSignInLoading(true);
+                      closeMobileMenu();
+                      navigate("/sign-in");
+                    }}
+                    disabled={isSignInLoading}
+                    className="flex items-center justify-center bg-white text-primary-600 px-6 py-3 rounded-lg font-semibold hover:bg-primary-50 transition-all duration-200 group w-full disabled:opacity-75 disabled:cursor-not-allowed"
+                  >
+                    {isSignInLoading ? (
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    ) : (
+                      <LogIn className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
+                    )}
+                    {isSignInLoading ? "Loading..." : "Sign In"}
+                  </button>
+                )}
+              </nav>
+            </div>
+          )}
         </div>
       </header>
     </>
