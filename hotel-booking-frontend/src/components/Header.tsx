@@ -12,6 +12,7 @@ import {
   LogIn,
   Menu,
   X,
+  Loader2,
 } from "lucide-react";
 
 const Header = () => {
@@ -19,6 +20,7 @@ const Header = () => {
   const search = useSearchContext();
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isSignInLoading, setIsSignInLoading] = useState(false);
 
   const handleLogoClick = () => {
     // Clear search context when going to home page
@@ -103,13 +105,21 @@ const Header = () => {
                   <SignOutButton />
                 </>
               ) : (
-                <Link
-                  to="/sign-in"
-                  className="flex items-center bg-white text-primary-600 px-6 py-2 rounded-lg font-semibold hover:bg-primary-50 hover:shadow-medium transition-all duration-200 group"
+                <button
+                  onClick={() => {
+                    setIsSignInLoading(true);
+                    navigate("/sign-in");
+                  }}
+                  disabled={isSignInLoading}
+                  className="flex items-center bg-white text-primary-600 px-6 py-2 rounded-lg font-semibold hover:bg-primary-50 hover:shadow-medium transition-all duration-200 group disabled:opacity-75 disabled:cursor-not-allowed"
                 >
-                  <LogIn className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
-                  Sign In
-                </Link>
+                  {isSignInLoading ? (
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  ) : (
+                    <LogIn className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
+                  )}
+                  {isSignInLoading ? "Loading..." : "Sign In"}
+                </button>
               )}
             </nav>
 
@@ -187,14 +197,22 @@ const Header = () => {
                     </div>
                   </>
                 ) : (
-                  <Link
-                    onClick={closeMobileMenu}
-                    to="/sign-in"
-                    className="flex items-center justify-center bg-white text-primary-600 px-6 py-3 rounded-lg font-semibold hover:bg-primary-50 transition-all duration-200 group w-full"
+                  <button
+                    onClick={() => {
+                      setIsSignInLoading(true);
+                      closeMobileMenu();
+                      navigate("/sign-in");
+                    }}
+                    disabled={isSignInLoading}
+                    className="flex items-center justify-center bg-white text-primary-600 px-6 py-3 rounded-lg font-semibold hover:bg-primary-50 transition-all duration-200 group w-full disabled:opacity-75 disabled:cursor-not-allowed"
                   >
-                    <LogIn className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
-                    Sign In
-                  </Link>
+                    {isSignInLoading ? (
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    ) : (
+                      <LogIn className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
+                    )}
+                    {isSignInLoading ? "Loading..." : "Sign In"}
+                  </button>
                 )}
               </nav>
             </div>
