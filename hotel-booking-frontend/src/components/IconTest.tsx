@@ -2,7 +2,7 @@ import { Mail, Lock, User } from "lucide-react";
 
 const IconTest = () => {
   return (
-    <div className="p-8 space-y-4">
+    <div className="p-8 space-y-4 border-2 border-green-500 rounded-lg">
       <h2 className="text-2xl font-bold">Icon Test</h2>
       <div className="flex space-x-4">
         <Mail className="h-6 w-6 text-gray-600" />
