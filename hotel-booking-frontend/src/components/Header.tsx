@@ -50,6 +50,11 @@ const Header = () => {
             <nav className="hidden md:flex items-center space-x-1">
               {isLoggedIn ? (
                 <>
+                  {/* Hallo Button */}
+                  <button className="flex items-center text-white/90 hover:text-white px-4 py-2 rounded-lg font-medium hover:bg-white/10 transition-all duration-200 group">
+                    Hallo
+                  </button>
+
                   {/* Analytics Dashboard Link */}
                   <Link
                     className="flex items-center text-white/90 hover:text-white px-4 py-2 rounded-lg font-medium hover:bg-white/10 transition-all duration-200 group"
