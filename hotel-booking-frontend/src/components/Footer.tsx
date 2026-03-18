@@ -43,7 +43,7 @@ const Footer = () => {
       {/* Main Content */}
       <div className="relative z-10 max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         {/* Newsletter Section */}
-        <div className="mb-16 bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
+        <div className="mb-16 bg-white/10 backdrop-blur-sm rounded-2xl p-8 border-2 border-green-500">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
             <div>
               <h2 className="text-3xl font-bold mb-4">Stay Updated</h2>
