@@ -27,3 +27,6 @@ dist-ssr
 .env.e2e
 node_modules
 .cursorignore
+
+*storybook.log
+storybook-static

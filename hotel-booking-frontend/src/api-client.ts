@@ -10,7 +10,7 @@ import {
   BookingType,
 } from "../../shared/types";
 import { BookingFormData } from "./forms/BookingForm/BookingForm";
-import { queryClient } from "./main";
+import { queryClient } from "./lib/query-client";
 
 export const fetchCurrentUser = async (): Promise<UserType> => {
   const response = await axiosInstance.get("/api/users/me");
