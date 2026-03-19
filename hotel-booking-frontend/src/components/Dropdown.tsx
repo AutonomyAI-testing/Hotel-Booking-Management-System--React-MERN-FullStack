@@ -70,7 +70,7 @@ const Dropdown = React.forwardRef<HTMLButtonElement, DropdownProps>(
               variant={variant}
               size={size}
               disabled={disabled}
-              className={cn("w-full justify-between", className)}
+              className={cn("w-full justify-between border-2 border-red-500", className)}
             >
               <span className="truncate">{displayText}</span>
               <ChevronDown className="h-4 w-4 ml-2 opacity-50 transition-transform group-data-[state=open]:rotate-180" />
