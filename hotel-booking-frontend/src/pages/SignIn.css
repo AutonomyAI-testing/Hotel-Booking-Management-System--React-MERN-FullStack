@@ -1,0 +1,637 @@
+/* ============================================================
+   Hotel Booking – Sign In Page
+   Design system: AutonomyAI (dark-first, orange accent, Poppins)
+   ============================================================ */
+
+.signin-shell {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  min-height: 100vh;
+  background: #0B0B0A;
+  font-family: 'Poppins', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  position: relative;
+}
+
+/* Film grain overlay — the signature brand texture */
+.signin-shell::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.045;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@media (max-width: 920px) {
+  .signin-shell {
+    grid-template-columns: 1fr;
+  }
+  .signin-brand {
+    display: none !important;
+  }
+}
+
+/* ---- Brand (left) panel ---- */
+.signin-brand {
+  position: relative;
+  overflow: hidden;
+  background: #121211;
+  border-right: 1px solid #3C3B39;
+  padding: clamp(36px, 4.5vw, 64px);
+  display: flex;
+  flex-direction: column;
+}
+
+.signin-brand::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(60% 55% at 18% 8%, rgba(94,84,82,.45), transparent 60%),
+    radial-gradient(50% 50% at 92% 100%, rgba(242,87,48,.10), transparent 62%);
+}
+
+.signin-brand > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Wordmark */
+.signin-wordmark {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 800;
+  font-size: 19px;
+  color: #FDFAF6;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+}
+
+.signin-wordmark .glyph {
+  width: 32px;
+  height: 32px;
+  background: #F25730;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.signin-wordmark .glyph svg {
+  width: 18px;
+  height: 18px;
+  stroke: #fff;
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+}
+
+.signin-wordmark .div-sep {
+  width: 1px;
+  height: 18px;
+  background: #3C3B39;
+  flex-shrink: 0;
+}
+
+.signin-wordmark .product-name {
+  font-weight: 400;
+  font-size: 15px;
+  color: #8A8680;
+}
+
+/* Brand content */
+.signin-brand-mid {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 48px 0;
+}
+
+.signin-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #F25730;
+  margin-bottom: 18px;
+}
+
+.signin-brand-h1 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 800;
+  font-size: clamp(28px, 3.5vw, 42px);
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  color: #FDFAF6;
+  margin: 0 0 18px;
+}
+
+.signin-brand-h1 .grad {
+  background: linear-gradient(95deg, #F25730 0%, #F69874 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.signin-lede {
+  font-size: 15.5px;
+  line-height: 1.65;
+  color: #8A8680;
+  max-width: 400px;
+  margin: 0 0 36px;
+}
+
+/* Pipeline timeline */
+.signin-pipeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-left: 1px solid #3C3B39;
+  padding-left: 20px;
+  margin-left: 8px;
+}
+
+.signin-pl-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 0;
+  position: relative;
+}
+
+.signin-pl-row::before {
+  content: "";
+  position: absolute;
+  left: -24px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #3C3B39;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.signin-pl-row.n-blue::before { background: #9FD2ED; box-shadow: 0 0 0 3px rgba(159,210,237,.18); }
+.signin-pl-row.n-amber::before { background: #F69874; box-shadow: 0 0 0 3px rgba(246,152,116,.18); }
+.signin-pl-row.n-ok::before { background: #6EC98F; box-shadow: 0 0 0 3px rgba(110,201,143,.18); }
+
+.signin-pl-label {
+  flex: 1;
+  font-size: 13px;
+  color: #8A8680;
+  line-height: 1.4;
+}
+
+.signin-pl-label b {
+  color: #FDFAF6;
+  font-weight: 600;
+}
+
+.signin-pl-time {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: #4A4946;
+  flex-shrink: 0;
+}
+
+/* Brand footer */
+.signin-brand-foot {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: #4A4946;
+  letter-spacing: 0.04em;
+}
+
+.signin-brand-foot .dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #3C3B39;
+}
+
+/* ---- Auth (right) panel ---- */
+.signin-auth {
+  background: #0B0B0A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(32px, 5vw, 64px) clamp(24px, 5vw, 56px);
+}
+
+.signin-card {
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Mobile-only wordmark */
+.signin-mobile-mark {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 800;
+  font-size: 17px;
+  color: #FDFAF6;
+  margin-bottom: 30px;
+}
+
+.signin-mobile-mark .glyph {
+  width: 28px;
+  height: 28px;
+  background: #F25730;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.signin-mobile-mark .glyph svg {
+  width: 15px;
+  height: 15px;
+  stroke: #fff;
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+}
+
+@media (max-width: 920px) {
+  .signin-mobile-mark {
+    display: flex;
+  }
+}
+
+/* Auth header */
+.signin-auth-head {
+  margin-bottom: 28px;
+}
+
+.signin-auth-head .ey {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #F25730;
+  margin: 0 0 10px;
+}
+
+.signin-auth-head h2 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 26px;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: #FDFAF6;
+  margin: 0 0 8px;
+}
+
+.signin-auth-head p {
+  font-size: 14px;
+  line-height: 1.55;
+  color: #8A8680;
+  margin: 0;
+}
+
+/* SSO buttons */
+.signin-sso {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+.signin-sso button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: #1A1A18;
+  color: #FDFAF6;
+  border: 1px solid #3C3B39;
+  border-radius: 8px;
+  padding: 11px 16px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.signin-sso button:hover {
+  border-color: #8A8680;
+  background: #212120;
+}
+
+.signin-sso button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(242,87,48,.35);
+}
+
+.signin-sso button svg {
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+}
+
+/* Divider */
+.signin-divider {
+  position: relative;
+  text-align: center;
+  margin: 22px 0;
+}
+
+.signin-divider::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: #3C3B39;
+}
+
+.signin-divider span {
+  position: relative;
+  background: #0B0B0A;
+  padding: 0 12px;
+  font-size: 12px;
+  color: #4A4946;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Form fields */
+.signin-field {
+  margin-bottom: 18px;
+}
+
+.signin-field label,
+.signin-lbl-row label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: #8A8680;
+  margin-bottom: 7px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.signin-lbl-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 7px;
+}
+
+.signin-lbl-row a {
+  font-size: 12px;
+  color: #F25730;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.signin-lbl-row a:hover {
+  text-decoration: underline;
+}
+
+.signin-input-wrap {
+  position: relative;
+}
+
+.signin-input-wrap input {
+  width: 100%;
+  background: #1A1A18;
+  border: 1px solid #3C3B39;
+  border-radius: 8px;
+  padding: 11px 14px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #FDFAF6;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.signin-input-wrap input::placeholder {
+  color: #4A4946;
+}
+
+.signin-input-wrap input:focus {
+  border-color: #F25730;
+  box-shadow: 0 0 0 3px rgba(242,87,48,.2);
+}
+
+.signin-input-wrap input.has-error {
+  border-color: #e85555;
+  box-shadow: 0 0 0 3px rgba(232,85,85,.2);
+}
+
+.signin-reveal {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  color: #4A4946;
+  display: flex;
+  align-items: center;
+  transition: color 0.15s;
+}
+
+.signin-reveal:hover {
+  color: #8A8680;
+}
+
+.signin-reveal svg {
+  width: 17px;
+  height: 17px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+input.with-reveal {
+  padding-right: 42px;
+}
+
+/* Error message */
+.signin-error-msg {
+  font-size: 12px;
+  color: #e85555;
+  margin-top: 5px;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Remember me checkbox */
+.signin-remember {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  user-select: none;
+}
+
+.signin-remember input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.signin-remember .box {
+  width: 17px;
+  height: 17px;
+  border: 1.5px solid #3C3B39;
+  border-radius: 4px;
+  background: #1A1A18;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+}
+
+.signin-remember .box svg {
+  width: 11px;
+  height: 11px;
+  stroke: #fff;
+  fill: none;
+  stroke-width: 2.6;
+  opacity: 0;
+  transition: opacity 0.12s;
+}
+
+.signin-remember input:checked + .box {
+  background: #F25730;
+  border-color: #F25730;
+}
+
+.signin-remember input:checked + .box svg {
+  opacity: 1;
+}
+
+.signin-remember input:focus-visible + .box {
+  box-shadow: 0 0 0 3px rgba(242,87,48,.35);
+}
+
+.signin-remember span.label {
+  font-size: 13.5px;
+  color: #8A8680;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Submit button */
+.signin-submit {
+  margin-top: 4px;
+  width: 100%;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  background: #F25730;
+  color: #fff;
+  border: 0;
+  border-radius: 8px;
+  padding: 13px 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  box-shadow: 0 0 0 1px rgba(242,87,48,.3), 0 4px 20px rgba(242,87,48,.25);
+  transition: background 0.15s ease, transform 0.12s ease, box-shadow 0.15s ease;
+}
+
+.signin-submit:hover {
+  background: #FC816F;
+  transform: translateY(-1px);
+}
+
+.signin-submit:active {
+  background: #ED5339;
+  transform: translateY(0);
+}
+
+.signin-submit:disabled {
+  cursor: wait;
+  background: #ED5339;
+  opacity: 0.85;
+}
+
+.signin-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255,255,255,.4);
+  border-right-color: #fff;
+  border-radius: 50%;
+  animation: signin-spin 0.65s linear infinite;
+  display: none;
+}
+
+.signin-submit.loading .signin-spinner {
+  display: block;
+}
+
+.signin-submit.loading .signin-submit-label {
+  opacity: 0.85;
+}
+
+@keyframes signin-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Footnote */
+.signin-footnote {
+  margin-top: 26px;
+  text-align: center;
+  font-size: 13.5px;
+  color: #57544F;
+  font-family: 'Poppins', sans-serif;
+}
+
+.signin-footnote a {
+  color: #F25730;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.signin-footnote a:hover {
+  text-decoration: underline;
+}
+
+/* Secure badge */
+.signin-secure {
+  margin-top: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  color: #4A4946;
+}
+
+.signin-secure svg {
+  width: 13px;
+  height: 13px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+}

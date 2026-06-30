@@ -4,20 +4,8 @@ import { useMutationWithLoading } from "../hooks/useLoadingHooks";
 import * as apiClient from "../api-client";
 import useAppContext from "../hooks/useAppContext";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Mail, Lock, Eye, EyeOff, LogIn, Sparkles } from "lucide-react";
 import { useState } from "react";
-import { Button } from "../components/ui/button";
-import { Input } from "../components/ui/input";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "../components/ui/card";
-import { Label } from "../components/ui/label";
-import { Separator } from "../components/ui/separator";
-import { Badge } from "../components/ui/badge";
+import "./SignIn.css";
 
 export type SignInFormData = {
   email: string;
@@ -30,6 +18,7 @@ const SignIn = () => {
   const queryClient = useQueryClient();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
 
   const location = useLocation();
 
@@ -68,184 +57,238 @@ const SignIn = () => {
   });
 
   return (
-    <div className="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-xl w-full space-y-8">
-        {/* Modern Card Container */}
-        <Card className="relative overflow-hidden border-0 shadow-2xl bg-white/95 backdrop-blur-sm">
-          {/* Decorative Background Elements */}
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary-500 to-primary-600"></div>
-          <div className="absolute -top-4 -right-4 w-24 h-24 bg-primary-100 rounded-full opacity-50"></div>
-          <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-primary-200 rounded-full opacity-30"></div>
+    <div className="signin-shell">
+      {/* =================== BRAND PANEL (left) =================== */}
+      <section className="signin-brand" aria-hidden="true">
+        {/* Wordmark */}
+        <div className="signin-wordmark">
+          <span className="glyph">
+            <svg viewBox="0 0 24 24" strokeLinecap="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+              <polyline points="9 22 9 12 15 12 15 22" />
+            </svg>
+          </span>
+          <span>Hotel<span style={{ color: "#F25730" }}>Book</span></span>
+          <span className="div-sep" aria-hidden="true" />
+          <span className="product-name">Guest Portal</span>
+        </div>
 
-          {/* Header */}
-          <CardHeader className="text-center relative z-10 pb-8">
-            <div className="mx-auto w-16 h-16 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center mb-4 shadow-lg">
-              <LogIn className="w-8 h-8 text-white" />
+        {/* Brand mid */}
+        <div className="signin-brand-mid">
+          <p className="signin-eyebrow">Effortless hotel reservations</p>
+          <h1 className="signin-brand-h1">
+            Your perfect stay, <span className="grad">just a click away.</span>
+          </h1>
+          <p className="signin-lede">
+            Search thousands of hotels worldwide, compare prices, and book
+            instantly — all from one seamless platform built for modern travelers.
+          </p>
+
+          <div className="signin-pipeline" aria-hidden="true">
+            <div className="signin-pl-row n-blue">
+              <span className="signin-pl-label">
+                <b>Search & discover</b> — hotels across 100+ destinations
+              </span>
+              <span className="signin-pl-time">step 1</span>
             </div>
-            <CardTitle className="text-3xl font-bold text-gray-900 mb-2">
-              Welcome Back
-            </CardTitle>
-            <CardDescription className="text-gray-600">
-              Sign in to your account to continue
-            </CardDescription>
+            <div className="signin-pl-row n-amber">
+              <span className="signin-pl-label">
+                <b>Compare & choose</b> — filter by price, rating, amenities
+              </span>
+              <span className="signin-pl-time">step 2</span>
+            </div>
+            <div className="signin-pl-row n-ok">
+              <span className="signin-pl-label">
+                <b>Book & confirm</b> — instant confirmation, no hidden fees
+              </span>
+              <span className="signin-pl-time">step 3</span>
+            </div>
+          </div>
+        </div>
 
-            {/* Development Notice */}
-            {!import.meta.env.PROD && (
-              <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-                <p className="text-sm text-yellow-800">
-                  <strong>Development Note:</strong> Authentication state
-                  persists between sessions. If you're seeing a logged-in state
-                  unexpectedly, use the "Clear Auth" button in the header.
-                </p>
-              </div>
-            )}
-          </CardHeader>
+        {/* Brand footer */}
+        <div className="signin-brand-foot">
+          <span>Secure payments</span>
+          <span className="dot" aria-hidden="true" />
+          <span>Free cancellation</span>
+          <span className="dot" aria-hidden="true" />
+          <span>24/7 support</span>
+        </div>
+      </section>
+
+      {/* =================== AUTH PANEL (right) =================== */}
+      <section className="signin-auth">
+        <div className="signin-card">
+          {/* Mobile-only wordmark */}
+          <div className="signin-mobile-mark" aria-hidden="true">
+            <span className="glyph">
+              <svg viewBox="0 0 24 24" stroke="white" fill="none" strokeWidth="1.8" strokeLinecap="round">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                <polyline points="9 22 9 12 15 12 15 22" />
+              </svg>
+            </span>
+            <span>Hotel<span style={{ color: "#F25730" }}>Book</span></span>
+          </div>
+
+          {/* Auth header */}
+          <div className="signin-auth-head">
+            <p className="ey">Sign in</p>
+            <h2>Welcome back</h2>
+            <p>Your next stay is waiting for you.</p>
+          </div>
+
+          {/* SSO buttons */}
+          <div className="signin-sso">
+            <button
+              type="button"
+              onClick={() =>
+                showToast({
+                  title: "Coming Soon",
+                  description: "Google sign-in will be available soon.",
+                  type: "SUCCESS",
+                })
+              }
+            >
+              {/* Google icon */}
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  fill="#4285F4"
+                  d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                />
+                <path
+                  fill="#34A853"
+                  d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                />
+                <path
+                  fill="#FBBC05"
+                  d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                />
+                <path
+                  fill="#EA4335"
+                  d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                />
+              </svg>
+              Continue with Google
+            </button>
+          </div>
+
+          {/* Divider */}
+          <div className="signin-divider">
+            <span>or</span>
+          </div>
 
           {/* Form */}
-          <CardContent className="space-y-6">
-            <form className="space-y-6" onSubmit={onSubmit}>
-              {/* Email Field */}
-              <div className="space-y-2">
-                <Label
-                  htmlFor="email"
-                  className="text-sm font-semibold text-gray-700"
+          <form onSubmit={onSubmit} noValidate>
+            {/* Email */}
+            <div className="signin-field">
+              <label htmlFor="signin-email">Work email</label>
+              <div className="signin-input-wrap">
+                <input
+                  id="signin-email"
+                  type="email"
+                  autoComplete="email"
+                  placeholder="you@company.com"
+                  className={errors.email ? "has-error" : ""}
+                  {...register("email", { required: "Email is required" })}
+                />
+              </div>
+              {errors.email && (
+                <p className="signin-error-msg">{errors.email.message}</p>
+              )}
+            </div>
+
+            {/* Password */}
+            <div className="signin-field">
+              <div className="signin-lbl-row">
+                <label htmlFor="signin-password">Password</label>
+                <Link to="/forgot-password" tabIndex={0}>
+                  Forgot password?
+                </Link>
+              </div>
+              <div className="signin-input-wrap">
+                <input
+                  id="signin-password"
+                  type={showPassword ? "text" : "password"}
+                  autoComplete="current-password"
+                  placeholder="••••••••••••"
+                  className={`with-reveal${errors.password ? " has-error" : ""}`}
+                  {...register("password", {
+                    required: "Password is required",
+                    minLength: {
+                      value: 6,
+                      message: "Password must be at least 6 characters",
+                    },
+                  })}
+                />
+                <button
+                  type="button"
+                  className="signin-reveal"
+                  onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
                 >
-                  Email Address
-                </Label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
-                    <Mail className="h-6 w-6 text-gray-600" />
-                  </div>
-                  <Input
-                    id="email"
-                    type="email"
-                    className="pl-10 pr-3 py-3 border border-gray-300 rounded-md text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 bg-white/80 backdrop-blur-sm"
-                    placeholder="Enter your email"
-                    {...register("email", { required: "Email is required" })}
-                  />
-                </div>
-                {errors.email && (
-                  <div className="flex items-center mt-1">
-                    <Badge
-                      variant="outline"
-                      className="text-red-500 border-red-200 bg-red-50"
-                    >
-                      <Sparkles className="w-4 h-4 mr-1" />
-                      {errors.email.message}
-                    </Badge>
-                  </div>
-                )}
+                  {showPassword ? (
+                    <svg viewBox="0 0 24 24">
+                      <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z" />
+                      <circle cx="12" cy="12" r="3" />
+                      <line x1="3" y1="3" x2="21" y2="21" />
+                    </svg>
+                  ) : (
+                    <svg viewBox="0 0 24 24">
+                      <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z" />
+                      <circle cx="12" cy="12" r="3" />
+                    </svg>
+                  )}
+                </button>
               </div>
+              {errors.password && (
+                <p className="signin-error-msg">{errors.password.message}</p>
+              )}
+            </div>
 
-              {/* Password Field */}
-              <div className="space-y-2">
-                <Label
-                  htmlFor="password"
-                  className="text-sm font-semibold text-gray-700"
-                >
-                  Password
-                </Label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
-                    <Lock className="h-6 w-6 text-gray-600" />
-                  </div>
-                  <Input
-                    id="password"
-                    type={showPassword ? "text" : "password"}
-                    className="pl-10 pr-12 py-3 border border-gray-300 rounded-md text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 bg-white/80 backdrop-blur-sm"
-                    placeholder="Enter your password"
-                    {...register("password", {
-                      required: "Password is required",
-                      minLength: {
-                        value: 6,
-                        message: "Password must be at least 6 characters",
-                      },
-                    })}
-                  />
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    className="absolute inset-y-0 right-0 pr-3 h-full"
-                    onClick={() => setShowPassword(!showPassword)}
-                  >
-                    {showPassword ? (
-                      <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-                    ) : (
-                      <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-                    )}
-                  </Button>
-                </div>
-                {errors.password && (
-                  <div className="flex items-center mt-1">
-                    <Badge
-                      variant="outline"
-                      className="text-red-500 border-red-200 bg-red-50"
-                    >
-                      <Sparkles className="w-4 h-4 mr-1" />
-                      {errors.password.message}
-                    </Badge>
-                  </div>
-                )}
-              </div>
+            {/* Remember me */}
+            <label className="signin-remember">
+              <input
+                type="checkbox"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+              />
+              <span className="box" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="M5 12.5 10 17l9-10" />
+                </svg>
+              </span>
+              <span className="label">Keep me signed in</span>
+            </label>
 
-              {/* Submit Button */}
-              <Button
-                type="submit"
-                disabled={isLoading}
-                className="w-full py-3 px-4 rounded-md text-white bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 transition-all duration-200 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
-              >
-                {isLoading ? (
-                  <div className="flex items-center">
-                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                    Signing in...
-                  </div>
-                ) : (
-                  <div className="flex items-center">
-                    <LogIn className="w-5 h-5 mr-2" />
-                    Sign In
-                  </div>
-                )}
-              </Button>
+            {/* Submit */}
+            <button
+              type="submit"
+              disabled={isLoading}
+              className={`signin-submit${isLoading ? " loading" : ""}`}
+            >
+              <span className="signin-spinner" aria-hidden="true" />
+              <span className="signin-submit-label">
+                {isLoading ? "Signing in…" : "Sign in"}
+              </span>
+            </button>
+          </form>
 
-              {/* Divider */}
-              <div className="relative my-6">
-                <Separator className="bg-gray-300" />
-                <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-white text-gray-500">or</span>
-                </div>
-              </div>
-
-              {/* Registration Link */}
-              <div className="text-center">
-                <p className="text-sm text-gray-600">
-                  Don't have an account?{" "}
-                  <Link
-                    to="/register"
-                    className="font-semibold text-primary-600 hover:text-primary-700 transition-colors duration-200 underline decoration-2 underline-offset-2"
-                  >
-                    Create one here
-                  </Link>
-                </p>
-              </div>
-            </form>
-          </CardContent>
-        </Card>
-
-        {/* Additional Info */}
-        <div className="text-center">
-          <p className="text-xs text-gray-500">
-            By signing in, you agree to our{" "}
-            <a href="#" className="text-primary-600 hover:underline">
-              Terms of Service
-            </a>{" "}
-            and{" "}
-            <a href="#" className="text-primary-600 hover:underline">
-              Privacy Policy
-            </a>
+          {/* Footnote */}
+          <p className="signin-footnote">
+            New to HotelBook?{" "}
+            <Link to="/register">Create an account</Link>
           </p>
+
+          {/* Secure badge */}
+          <div className="signin-secure">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="4" y="11" width="16" height="10" rx="2" />
+              <path d="M8 11V8a4 4 0 0 1 8 0v3" />
+            </svg>
+            Encrypted &amp; secure payments
+          </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 };
