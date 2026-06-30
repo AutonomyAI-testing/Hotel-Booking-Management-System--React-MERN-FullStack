@@ -87,11 +87,7 @@ const App = () => {
         />
         <Route
           path="/sign-in"
-          element={
-            <AuthLayout>
-              <SignIn />
-            </AuthLayout>
-          }
+          element={<SignIn />}
         />
 
         {isLoggedIn && (

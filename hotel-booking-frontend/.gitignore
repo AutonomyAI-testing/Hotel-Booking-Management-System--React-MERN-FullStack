@@ -27,3 +27,7 @@ dist-ssr
 .env.e2e
 node_modules
 .cursorignore
+
+# Storybook (sandbox preview only)
+.storybook/
+*.stories.*

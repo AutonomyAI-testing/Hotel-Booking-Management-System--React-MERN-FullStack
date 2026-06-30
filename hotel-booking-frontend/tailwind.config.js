@@ -61,9 +61,29 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        // AutonomyAI Design System Tokens
+        ink: {
+          950: "#0B0B0A",
+          900: "#121211",
+          800: "#1A1A18",
+          700: "#212120",
+          600: "#2A2A28",
+          500: "#333333",
+          400: "#3C3B39",
+          300: "#4A4946",
+        },
+        aai: {
+          orange: "#F25730",
+          "orange-bright": "#FC816F",
+          "orange-deep": "#ED5339",
+          "orange-peach": "#F69874",
+          blue: "#9FD2ED",
+        },
       },
       fontFamily: {
         sans: ["Inter", "system-ui", "sans-serif"],
+        poppins: ["Poppins", "system-ui", "sans-serif"],
+        mono: ["JetBrains Mono", "monospace"],
       },
       boxShadow: {
         soft: "0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04)",
@@ -71,11 +91,13 @@ export default {
           "0 4px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
         large:
           "0 10px 40px -10px rgba(0, 0, 0, 0.15), 0 20px 25px -5px rgba(0, 0, 0, 0.1)",
+        "orange-glow": "0 0 0 3px rgba(242,87,48,.35), 0 4px 20px rgba(242,87,48,.25)",
       },
       animation: {
         "fade-in": "fadeIn 0.5s ease-in-out",
         "slide-up": "slideUp 0.3s ease-out",
         "bounce-gentle": "bounceGentle 2s infinite",
+        "spin-fast": "spin 0.65s linear infinite",
       },
       keyframes: {
         fadeIn: {
