@@ -22,7 +22,6 @@ import Home from "./pages/Home";
 import ApiDocs from "./pages/ApiDocs";
 import ApiStatus from "./pages/ApiStatus";
 import AnalyticsDashboard from "./pages/AnalyticsDashboard";
-import TargetComponent from "./components/tempRenderFile";
 
 const App = () => {
   const { isLoggedIn } = useAppContext();
@@ -34,11 +33,10 @@ const App = () => {
           path="/"
           element={
             <Layout>
-              <TargetComponent />
+              <Home />
             </Layout>
           }
         />
-        {/* Commented out for testing - original routes
         <Route
           path="/search"
           element={
@@ -141,7 +139,6 @@ const App = () => {
             />
           </>
         )}
-        */}
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
       <Toaster />
