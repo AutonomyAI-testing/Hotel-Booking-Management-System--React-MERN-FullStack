@@ -1,3 +1,116 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ============================================================
+   AutonomyAI Design System — Fonts
+   ============================================================ */
+
+@font-face {
+  font-family: 'Poppins';
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url('/fonts/Poppins-Regular.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Poppins';
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  src: url('/fonts/Poppins-Medium.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Poppins';
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+  src: url('/fonts/Poppins-SemiBold.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Poppins';
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  src: url('/fonts/Poppins-Bold.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Poppins';
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+  src: url('/fonts/Poppins-ExtraBold.ttf') format('truetype');
+}
+
+/* ============================================================
+   AutonomyAI Design Tokens
+   ============================================================ */
+:root {
+  /* Brand core */
+  --aai-orange:        #F25730;
+  --aai-orange-bright: #FC816F;
+  --aai-orange-deep:   #ED5339;
+  --aai-orange-peach:  #F69874;
+  --aai-blue:          #9FD2ED;
+
+  /* Ink (warm charcoal dark scale) */
+  --ink-950: #0B0B0A;
+  --ink-900: #121211;
+  --ink-800: #1A1A18;
+  --ink-700: #212120;
+  --ink-600: #2A2A28;
+  --ink-500: #333333;
+  --ink-400: #3C3B39;
+  --ink-300: #4A4946;
+
+  /* Status */
+  --ok:   #4FB477;
+  --warn: #E8A13C;
+  --err:  #E5533C;
+
+  /* Type */
+  --font-display: 'Poppins', 'Helvetica Neue', Arial, sans-serif;
+  --font-sans:    'Poppins', 'Helvetica Neue', Arial, sans-serif;
+  --font-mono:    'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* Motion */
+  --ease-out: cubic-bezier(.2,.7,.2,1);
+  --glow-orange: 0 0 0 1px rgba(242,87,48,.35), 0 8px 30px rgba(242,87,48,.22);
+  --ring-orange: rgba(242,87,48,.55);
+}
+
+/* Auth page text tokens (dark theme) */
+.auth-panel {
+  --fg:      #FFFFFF;
+  --fg-muted: #B4B1AC;
+  --fg-faint: #7C7A75;
+}
+
+/* Auth form focus ring override */
+.auth-field:focus {
+  border-color: var(--aai-orange) !important;
+  box-shadow: 0 0 0 3px var(--ring-orange) !important;
+  outline: none !important;
+}
+
+/* Spinner animation for submit button */
+@keyframes auth-spin {
+  to { transform: rotate(360deg); }
+}
+.auth-spinner {
+  animation: auth-spin 0.65s linear infinite;
+}
+
+/* Film grain overlay for brand panel */
+.brand-grain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.045;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}

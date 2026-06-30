@@ -4,33 +4,26 @@ import { useMutationWithLoading } from "../hooks/useLoadingHooks";
 import * as apiClient from "../api-client";
 import useAppContext from "../hooks/useAppContext";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Mail, Lock, Eye, EyeOff, LogIn, Sparkles } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
-import { Button } from "../components/ui/button";
-import { Input } from "../components/ui/input";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "../components/ui/card";
-import { Label } from "../components/ui/label";
-import { Separator } from "../components/ui/separator";
-import { Badge } from "../components/ui/badge";
 
 export type SignInFormData = {
   email: string;
   password: string;
 };
 
+const FOCUS_BORDER = "#F25730";
+const FOCUS_SHADOW = "0 0 0 3px rgba(242,87,48,.55)";
+const DEFAULT_BORDER = "#3C3B39";
+const ERROR_BORDER = "#E5533C";
+
 const SignIn = () => {
   const { showToast } = useAppContext();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
   const location = useLocation();
 
   const {
@@ -43,8 +36,7 @@ const SignIn = () => {
     onSuccess: async () => {
       showToast({
         title: "Sign In Successful",
-        description:
-          "Welcome back! You have been successfully signed in to your account.",
+        description: "Welcome back! You have been successfully signed in.",
         type: "SUCCESS",
       });
       await queryClient.invalidateQueries("validateToken");
@@ -67,184 +59,246 @@ const SignIn = () => {
     });
   });
 
+  /** Wrap RHF register to merge orange focus/blur ring styling */
+  function withRing<T extends HTMLInputElement>(
+    rhfProps: ReturnType<typeof register>,
+    hasError: boolean
+  ) {
+    const { onBlur: rhfBlur, ...rest } = rhfProps;
+    return {
+      ...rest,
+      onFocus: (e: React.FocusEvent<T>) => {
+        e.currentTarget.style.borderColor = FOCUS_BORDER;
+        e.currentTarget.style.boxShadow = FOCUS_SHADOW;
+      },
+      onBlur: (e: React.FocusEvent<T>) => {
+        e.currentTarget.style.borderColor = hasError ? ERROR_BORDER : DEFAULT_BORDER;
+        e.currentTarget.style.boxShadow = "none";
+        rhfBlur(e as React.FocusEvent<HTMLInputElement>);
+      },
+    };
+  }
+
+  const baseInputClass =
+    "w-full font-poppins text-[15px] text-white rounded-[8px] px-[14px] py-[12px] outline-none transition-all duration-150";
+
   return (
-    <div className="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-xl w-full space-y-8">
-        {/* Modern Card Container */}
-        <Card className="relative overflow-hidden border-0 shadow-2xl bg-white/95 backdrop-blur-sm">
-          {/* Decorative Background Elements */}
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary-500 to-primary-600"></div>
-          <div className="absolute -top-4 -right-4 w-24 h-24 bg-primary-100 rounded-full opacity-50"></div>
-          <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-primary-200 rounded-full opacity-30"></div>
+    <div className="w-full">
+      {/* Auth head */}
+      <div style={{ marginBottom: "30px" }}>
+        <p
+          className="font-mono font-medium text-[12px] tracking-[0.16em] uppercase m-0 mb-[14px]"
+          style={{ color: "#7C7A75" }}
+        >
+          Sign in
+        </p>
+        <h2
+          className="font-poppins font-bold leading-[1.1] tracking-[-0.02em] m-0 text-white"
+          style={{ fontSize: "30px" }}
+        >
+          Welcome back
+        </h2>
+        <p className="text-[15px] leading-[1.5] mt-[9px]" style={{ color: "#B4B1AC" }}>
+          Pick up where you left off.
+        </p>
+      </div>
 
-          {/* Header */}
-          <CardHeader className="text-center relative z-10 pb-8">
-            <div className="mx-auto w-16 h-16 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center mb-4 shadow-lg">
-              <LogIn className="w-8 h-8 text-white" />
-            </div>
-            <CardTitle className="text-3xl font-bold text-gray-900 mb-2">
-              Welcome Back
-            </CardTitle>
-            <CardDescription className="text-gray-600">
-              Sign in to your account to continue
-            </CardDescription>
-
-            {/* Development Notice */}
-            {!import.meta.env.PROD && (
-              <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-                <p className="text-sm text-yellow-800">
-                  <strong>Development Note:</strong> Authentication state
-                  persists between sessions. If you're seeing a logged-in state
-                  unexpectedly, use the "Clear Auth" button in the header.
-                </p>
-              </div>
-            )}
-          </CardHeader>
-
-          {/* Form */}
-          <CardContent className="space-y-6">
-            <form className="space-y-6" onSubmit={onSubmit}>
-              {/* Email Field */}
-              <div className="space-y-2">
-                <Label
-                  htmlFor="email"
-                  className="text-sm font-semibold text-gray-700"
-                >
-                  Email Address
-                </Label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
-                    <Mail className="h-6 w-6 text-gray-600" />
-                  </div>
-                  <Input
-                    id="email"
-                    type="email"
-                    className="pl-10 pr-3 py-3 border border-gray-300 rounded-md text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 bg-white/80 backdrop-blur-sm"
-                    placeholder="Enter your email"
-                    {...register("email", { required: "Email is required" })}
-                  />
-                </div>
-                {errors.email && (
-                  <div className="flex items-center mt-1">
-                    <Badge
-                      variant="outline"
-                      className="text-red-500 border-red-200 bg-red-50"
-                    >
-                      <Sparkles className="w-4 h-4 mr-1" />
-                      {errors.email.message}
-                    </Badge>
-                  </div>
-                )}
-              </div>
-
-              {/* Password Field */}
-              <div className="space-y-2">
-                <Label
-                  htmlFor="password"
-                  className="text-sm font-semibold text-gray-700"
-                >
-                  Password
-                </Label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
-                    <Lock className="h-6 w-6 text-gray-600" />
-                  </div>
-                  <Input
-                    id="password"
-                    type={showPassword ? "text" : "password"}
-                    className="pl-10 pr-12 py-3 border border-gray-300 rounded-md text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 bg-white/80 backdrop-blur-sm"
-                    placeholder="Enter your password"
-                    {...register("password", {
-                      required: "Password is required",
-                      minLength: {
-                        value: 6,
-                        message: "Password must be at least 6 characters",
-                      },
-                    })}
-                  />
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    className="absolute inset-y-0 right-0 pr-3 h-full"
-                    onClick={() => setShowPassword(!showPassword)}
-                  >
-                    {showPassword ? (
-                      <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-                    ) : (
-                      <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-                    )}
-                  </Button>
-                </div>
-                {errors.password && (
-                  <div className="flex items-center mt-1">
-                    <Badge
-                      variant="outline"
-                      className="text-red-500 border-red-200 bg-red-50"
-                    >
-                      <Sparkles className="w-4 h-4 mr-1" />
-                      {errors.password.message}
-                    </Badge>
-                  </div>
-                )}
-              </div>
-
-              {/* Submit Button */}
-              <Button
-                type="submit"
-                disabled={isLoading}
-                className="w-full py-3 px-4 rounded-md text-white bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 transition-all duration-200 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
-              >
-                {isLoading ? (
-                  <div className="flex items-center">
-                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                    Signing in...
-                  </div>
-                ) : (
-                  <div className="flex items-center">
-                    <LogIn className="w-5 h-5 mr-2" />
-                    Sign In
-                  </div>
-                )}
-              </Button>
-
-              {/* Divider */}
-              <div className="relative my-6">
-                <Separator className="bg-gray-300" />
-                <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-white text-gray-500">or</span>
-                </div>
-              </div>
-
-              {/* Registration Link */}
-              <div className="text-center">
-                <p className="text-sm text-gray-600">
-                  Don't have an account?{" "}
-                  <Link
-                    to="/register"
-                    className="font-semibold text-primary-600 hover:text-primary-700 transition-colors duration-200 underline decoration-2 underline-offset-2"
-                  >
-                    Create one here
-                  </Link>
-                </p>
-              </div>
-            </form>
-          </CardContent>
-        </Card>
-
-        {/* Additional Info */}
-        <div className="text-center">
-          <p className="text-xs text-gray-500">
-            By signing in, you agree to our{" "}
-            <a href="#" className="text-primary-600 hover:underline">
-              Terms of Service
-            </a>{" "}
-            and{" "}
-            <a href="#" className="text-primary-600 hover:underline">
-              Privacy Policy
-            </a>
-          </p>
+      {/* Form */}
+      <form
+        onSubmit={onSubmit}
+        noValidate
+        style={{ display: "flex", flexDirection: "column", gap: "16px" }}
+      >
+        {/* Email */}
+        <div>
+          <label
+            htmlFor="email"
+            className="block text-[13px] font-medium mb-[7px]"
+            style={{ color: "#B4B1AC" }}
+          >
+            Email address
+          </label>
+          <input
+            id="email"
+            type="email"
+            autoComplete="email"
+            placeholder="you@example.com"
+            className={baseInputClass}
+            style={{
+              background: "#333333",
+              border: `1px solid ${errors.email ? ERROR_BORDER : DEFAULT_BORDER}`,
+            }}
+            {...withRing(register("email", { required: "Email is required" }), !!errors.email)}
+          />
+          {errors.email && (
+            <p className="text-[12.5px] mt-[6px]" style={{ color: ERROR_BORDER }}>
+              {errors.email.message}
+            </p>
+          )}
         </div>
+
+        {/* Password */}
+        <div>
+          <div className="flex items-center justify-between mb-[7px]">
+            <label
+              htmlFor="password"
+              className="block text-[13px] font-medium"
+              style={{ color: "#B4B1AC" }}
+            >
+              Password
+            </label>
+            <a
+              href="#"
+              className="text-[12.5px] no-underline hover:underline"
+              style={{ color: "#F25730" }}
+            >
+              Forgot password?
+            </a>
+          </div>
+          <div className="relative flex items-center">
+            <input
+              id="password"
+              type={showPassword ? "text" : "password"}
+              autoComplete="current-password"
+              placeholder="••••••••••••"
+              className={`${baseInputClass} pr-[44px]`}
+              style={{
+                background: "#333333",
+                border: `1px solid ${errors.password ? ERROR_BORDER : DEFAULT_BORDER}`,
+              }}
+              {...withRing(
+                register("password", {
+                  required: "Password is required",
+                  minLength: { value: 6, message: "Password must be at least 6 characters" },
+                }),
+                !!errors.password
+              )}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              aria-label={showPassword ? "Hide password" : "Show password"}
+              className="absolute right-[6px] p-2 rounded-[6px] flex items-center justify-center border-0 bg-transparent cursor-pointer transition-colors duration-150"
+              style={{ color: "#7C7A75" }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = "#B4B1AC";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = "#7C7A75";
+              }}
+            >
+              {showPassword ? (
+                <EyeOff className="w-[17px] h-[17px] stroke-[1.8]" />
+              ) : (
+                <Eye className="w-[17px] h-[17px] stroke-[1.8]" />
+              )}
+            </button>
+          </div>
+          {errors.password && (
+            <p className="text-[12.5px] mt-[6px]" style={{ color: ERROR_BORDER }}>
+              {errors.password.message}
+            </p>
+          )}
+        </div>
+
+        {/* Remember me */}
+        <label
+          className="flex items-center gap-[9px] text-[13.5px] cursor-pointer select-none mt-[2px]"
+          style={{ color: "#B4B1AC" }}
+        >
+          <input
+            type="checkbox"
+            className="absolute opacity-0 w-0 h-0"
+            checked={rememberMe}
+            onChange={(e) => setRememberMe(e.target.checked)}
+          />
+          <span
+            className="w-[17px] h-[17px] rounded-[5px] flex items-center justify-center flex-none transition-all duration-150"
+            style={{
+              border: `1px solid ${rememberMe ? "#F25730" : "#4A4946"}`,
+              background: rememberMe ? "#F25730" : "#333333",
+            }}
+          >
+            {rememberMe && (
+              <svg
+                viewBox="0 0 24 24"
+                className="w-[11px] h-[11px] fill-none stroke-white stroke-[2.6]"
+              >
+                <path d="M5 12.5 10 17l9-10" />
+              </svg>
+            )}
+          </span>
+          Keep me signed in
+        </label>
+
+        {/* Submit */}
+        <button
+          type="submit"
+          disabled={isLoading}
+          className="mt-[4px] w-full font-poppins font-semibold text-[15px] text-white border-0 rounded-[8px] px-[16px] py-[13px] flex items-center justify-center gap-[9px] transition-all duration-150"
+          style={{
+            background: isLoading ? "#ED5339" : "#F25730",
+            boxShadow: "0 0 0 1px rgba(242,87,48,.35), 0 8px 30px rgba(242,87,48,.22)",
+            cursor: isLoading ? "wait" : "pointer",
+          }}
+          onMouseEnter={(e) => {
+            if (!isLoading) {
+              e.currentTarget.style.background = "#FC816F";
+              e.currentTarget.style.transform = "translateY(-1px)";
+            }
+          }}
+          onMouseLeave={(e) => {
+            if (!isLoading) {
+              e.currentTarget.style.background = "#F25730";
+              e.currentTarget.style.transform = "translateY(0)";
+            }
+          }}
+        >
+          {isLoading && (
+            <span
+              className="w-[16px] h-[16px] rounded-full flex-none animate-auth-spin"
+              style={{
+                border: "2px solid rgba(255,255,255,.4)",
+                borderRightColor: "#fff",
+              }}
+              aria-hidden="true"
+            />
+          )}
+          <span style={{ opacity: isLoading ? 0.85 : 1 }}>
+            {isLoading ? "Signing in…" : "Sign in"}
+          </span>
+        </button>
+      </form>
+
+      {/* Footnote */}
+      <p
+        className="mt-[26px] text-center text-[13.5px]"
+        style={{ color: "#B4B1AC" }}
+      >
+        New to MernHolidays?{" "}
+        <Link
+          to="/register"
+          className="font-medium no-underline hover:underline"
+          style={{ color: "#F25730" }}
+        >
+          Create an account
+        </Link>
+      </p>
+
+      {/* Secure footer */}
+      <div
+        className="mt-[28px] flex items-center justify-center gap-[8px] font-mono text-[11px] tracking-[0.05em]"
+        style={{ color: "#7C7A75" }}
+      >
+        <svg
+          viewBox="0 0 24 24"
+          className="w-[13px] h-[13px] fill-none stroke-current stroke-[1.8]"
+          aria-hidden="true"
+        >
+          <rect x="4" y="11" width="16" height="10" rx="2" />
+          <path d="M8 11V8a4 4 0 0 1 8 0v3" />
+        </svg>
+        Encrypted &amp; secure
       </div>
     </div>
   );
